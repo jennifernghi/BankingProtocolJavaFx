@@ -17,7 +17,7 @@
                         <TextField id="account_text" fx:id="account_text" layoutX="14.0" layoutY="27.0" text="account #" />
                         <TextField id="balance_text" fx:id="balance_text" layoutX="14.0" layoutY="88.0" text="Balance" />
                         <TextField id="amount_text" fx:id="amount_text" layoutX="14.0" layoutY="152.0" text="amount" />
-                        <Button id="balance_btn" fx:id="balance_btn" layoutX="14.0" layoutY="222.0" mnemonicParsing="false" onAction="#balanceProtocol" text="Checkking balance" />
+                        <Button id="balance_btn" fx:id="balance_btn" layoutX="14.0" layoutY="222.0" mnemonicParsing="false" onAction="#balanceProtocol" text="Checking balance" />
                         <Button id="deposit_btn" fx:id="deposit_btn" layoutX="194.0" layoutY="222.0" mnemonicParsing="false" onAction="#depositProtocol" text="Deposit" />
                         <Button id="withdraw_btn" fx:id="withdraw_btn" layoutX="299.0" layoutY="222.0" mnemonicParsing="false" onAction="#withdrawProtocol" text="Withdraw" />
                         <Button id="quit" fx:id="quit" layoutX="425.0" layoutY="222.0" mnemonicParsing="false" onAction="#quitProtocol" text="Quit" />
