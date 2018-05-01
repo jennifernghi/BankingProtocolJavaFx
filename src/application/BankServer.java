@@ -1,28 +1,26 @@
 package application;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.io.*;
+import java.net.*;
 
 public class BankServer {
 
 	private ServerSocket server = null;
+	// bank data
+	private Bank bank = new Bank();
 
 	// starts server and waits for a connection
 	public void server(int port) throws IOException {
 		server = new ServerSocket(port);
 		while (true) {
 			System.out.println("waiting");
+			
 			Socket socket = null;
-
+			//waiting for a connection
 			socket = server.accept();
-			Bank bank = new Bank();
-
 			System.out.println("A new client connected: " + socket);
 
-			// obtaining input and out streams
+			// get input and output streams
 			DataInputStream input = new DataInputStream(socket.getInputStream());
 			DataOutputStream output = new DataOutputStream(socket.getOutputStream());
 
@@ -33,7 +31,6 @@ public class BankServer {
 
 			// Invoking the start() method
 			t.start();
-
 		}
 
 	}

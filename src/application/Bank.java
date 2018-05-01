@@ -6,6 +6,7 @@ public class Bank {
 	ArrayList<BankAccount> acc = new ArrayList<>();
 	
 	public Bank(){
+		//initialize with dummy data
 		acc.add(new BankAccount(0, 100));
 		acc.add(new BankAccount(1, 200));
 		acc.add(new BankAccount(2, 1000));
@@ -15,7 +16,7 @@ public class Bank {
 		acc.add(new BankAccount(6, 10000));
 		
 	}
-	
+	//get BankAccount with account number
 	public BankAccount getAccount(int acctNum){
 		for(int i =0; i< this.acc.size(); i++){
 			if(this.acc.get(i).getAccountNumber()==acctNum){
@@ -25,11 +26,13 @@ public class Bank {
 		return null;
 	}
 	
+	//deposit routine
 	public void deposit(int acct, double amount){
 		BankAccount account = getAccount(acct);
 		setAmount(acct, account.getBalance() + amount);
 	}
 	
+	//withdraw routine
 	public void withdraw(int acct, double amount){
 		BankAccount account = getAccount(acct);
 		double balance = account.getBalance() - amount;
@@ -40,10 +43,12 @@ public class Bank {
 		}
 	}
 	
+	//get balance
 	public double getBalance(int acct){
 		return getAccount(acct).getBalance();
 	}
 	
+	//set new balance
 	public void setAmount(int acctNum, double amount){
 		for(int i =0; i< this.acc.size(); i++){
 			if(this.acc.get(i).getAccountNumber()==acctNum){

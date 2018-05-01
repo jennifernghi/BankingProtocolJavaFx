@@ -2,7 +2,6 @@ package application;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -98,6 +97,20 @@ public class Controller implements Initializable {
 		}).start();
 
 	}
+	
+	@FXML
+	protected void quitProtocol(ActionEvent event) {
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				client.request("QUIT", account_text.getText().trim(), amount_text.getText().trim());
+
+				Platform.exit();
+			}
+		}).start();
+
+	}
 
 	public BankClient getClient() {
 		return client;
@@ -115,39 +128,11 @@ public class Controller implements Initializable {
 		return amount_text;
 	}
 
-	public Button getBalance_btn() {
-		return balance_btn;
-	}
-
-	public Button getDeposit_btn() {
-		return deposit_btn;
-	}
-
-	public Button getWithdraw_btn() {
-		return withdraw_btn;
-	}
-
-	public Button getQuit() {
-		return quit;
-	}
-
 	public Label getStatus() {
 		return status;
 	}
 
-	@FXML
-	protected void quitProtocol(ActionEvent event) {
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				client.request("QUIT", account_text.getText().trim(), amount_text.getText().trim());
-
-				Platform.exit();
-			}
-		}).start();
-
-	}
+	
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {

@@ -1,15 +1,10 @@
 package application;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 public class ClientHandler extends Thread {
-
-
 	private Socket socket;
 	private DataOutputStream out;
 	private DataInputStream in;
@@ -24,12 +19,19 @@ public class ClientHandler extends Thread {
 		this.response="";
 	}
 
+	// split String data into list 
 	public ArrayList<String> stringHandle(String str){
 		ArrayList<String> strArr= new ArrayList<>(Arrays.asList(str.split(" ")));
 
 		return strArr;
 	}
+	
+	public String getResponse() {
+		return response;
+	}
 
+	// server protocols
+	// return string response for client
 	private String routines(ArrayList<String> arr){
 		switch(arr.get(0)){
 		case "DEPOSIT":
@@ -51,27 +53,28 @@ public class ClientHandler extends Thread {
 		}
 	}
 
+	//deposit protocol
 	private String depositProtocol(ArrayList<String> arr){
 		bank.deposit(Integer.parseInt(arr.get(1)), Double.parseDouble(arr.get(2)));
 		double balance = bank.getAccount(Integer.parseInt(arr.get(1))).getBalance();
 		return "new balance of account # " + arr.get(1) +" is "+ balance +"\n";
 	}
 
+	//withdraw protocol
 	private String withdrawProtocol(ArrayList<String> arr){
 		bank.withdraw(Integer.parseInt(arr.get(1)), Double.parseDouble(arr.get(2)));
 		double balance = bank.getAccount(Integer.parseInt(arr.get(1))).getBalance();
 		return "new balance of account # " + arr.get(1) +" is "+ balance+"\n";
 	}
 
+	//balance protocol
 	private String balanceProtocol(ArrayList<String> arr){
 		BankAccount account = bank.getAccount(Integer.parseInt(arr.get(1)));
 		double balance = account.getBalance();
 		return "balance of account # " + arr.get(1) +" is "+ balance+"\n";
 	}
 
-	public String getResponse() {
-		return response;
-	}
+	
 
 	@Override
 	public void run() {
@@ -79,6 +82,7 @@ public class ClientHandler extends Thread {
 		String line = "";
 
 		try {
+			//keep getting client data 
 			while(!line.equals("QUIT")){
 				line = in.readUTF();
 				System.out.println(line);
@@ -87,10 +91,11 @@ public class ClientHandler extends Thread {
 				this.response = routines(stringHandle(line));
 				System.out.println(this.response);
 
-				//SEND RESPONSE TO SOCKET
+				//SEND RESPONSE TO CLIENT SOCKET
 				this.out.writeBytes(this.response);
 			}
 			
+			//if client send QUIT signal, close the socket
 			this.socket.close();
 
 		} catch (IOException e) {
@@ -99,8 +104,5 @@ public class ClientHandler extends Thread {
 		}
 
 		return;
-
 	}
-
-
 }

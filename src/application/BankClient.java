@@ -1,20 +1,15 @@
 package application;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 public class BankClient {
 
 	// initialize socket and input output streams
 	private Socket socket = null;
 	private DataOutputStream output = null;
-	private BufferedReader reader = null;
 	private BufferedReader readerServer = null;
 	private int acctNum;
 	private double balance;
@@ -49,6 +44,7 @@ public class BankClient {
 	public void start(String host, int port, Controller controller) {
 		try {
 			this.controller = controller;
+			//open new socket
 			socket = new Socket(host, port);
 
 			this.connected = true;
@@ -57,6 +53,7 @@ public class BankClient {
 			}
 
 			if (socket != null) {
+				//buffer get responses from server
 				readerServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 				// sends output to the socket
@@ -66,34 +63,6 @@ public class BankClient {
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	public void request(String protocol, String acctNum, String amount) {
-		try {
-
-			switch (protocol) {
-				case "DEPOSIT":
-					output.writeUTF("DEPOSIT " + this.controller.getAccount_text().getText().trim() + " " + this.controller.getAmount_text().getText().trim());
-					serverResponse();
-					break;
-				case "WITHDRAW":
-					output.writeUTF("WITHDRAW " + this.controller.getAccount_text().getText().trim() + " " + this.controller.getAmount_text().getText().trim());
-					serverResponse();
-					break;
-				case "BALANCE":
-					output.writeUTF("BALANCE " + this.controller.getAccount_text().getText().trim());
-					serverResponse();
-					break;
-				case "QUIT":
-					output.writeUTF("QUIT");
-					
-					break;
-			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -127,5 +96,41 @@ public class BankClient {
 		}
 
 	}
+	
+	public void request(String protocol, String acctNum, String amount) {
+		try {
+			//send data to server
+			switch (protocol) {
+				case "DEPOSIT":
+					// send: DEPOSIT accountNumber amount
+					output.writeUTF("DEPOSIT " + this.controller.getAccount_text().getText().trim() + " " + this.controller.getAmount_text().getText().trim());
+					//get server response
+					serverResponse();
+					break;
+				case "WITHDRAW":
+					// send: WITHDRAW accountNumber amount
+					output.writeUTF("WITHDRAW " + this.controller.getAccount_text().getText().trim() + " " + this.controller.getAmount_text().getText().trim());
+					//get server response
+					serverResponse();
+					break;
+				case "BALANCE":
+					// send: BALANCE accountNumber 
+					output.writeUTF("BALANCE " + this.controller.getAccount_text().getText().trim());
+					//get server response
+					serverResponse();
+					break;
+				case "QUIT":
+					// send: QUIT  
+					output.writeUTF("QUIT");
+					break;
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	
 
 }
